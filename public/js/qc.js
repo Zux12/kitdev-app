@@ -59,15 +59,26 @@ function renderChart(control_id) {
   const datasets = [
     { label: 'Value', data, fill: false, tension: 0.2 },
   ];
-  const ann = [];
+  const datasets = [
+    { label: 'Value', data, fill: false, tension: 0.2 },
+  ];
+
+  // Build annotations as an object (required by the plugin)
+  const annotations = {};
   if (Number.isFinite(mean)) {
-    const makeLine = (y,label)=>({ type:'line', yMin:y, yMax:y, borderWidth:1, borderColor:'#888', label:{ display:true, content:label, position:'start' }});
-    ann.push(makeLine(mean, 'Mean'));
-    if (Number.isFinite(sd) && sd>0) {
-      ann.push(makeLine(mean + 2*sd, '+2SD'));
-      ann.push(makeLine(mean - 2*sd, '-2SD'));
-      ann.push(makeLine(mean + 3*sd, '+3SD'));
-      ann.push(makeLine(mean - 3*sd, '-3SD'));
+    const line = (y, label) => ({
+      type: 'line',
+      yMin: y, yMax: y,
+      borderWidth: 1,
+      borderColor: '#888',
+      label: { display: true, content: label, position: 'start' }
+    });
+    annotations.mean = line(mean, 'Mean');
+    if (Number.isFinite(sd) && sd > 0) {
+      annotations.p2sd = line(mean + 2*sd, '+2SD');
+      annotations.m2sd = line(mean - 2*sd, '-2SD');
+      annotations.p3sd = line(mean + 3*sd, '+3SD');
+      annotations.m3sd = line(mean - 3*sd, '-3SD');
     }
   }
 
@@ -78,11 +89,12 @@ function renderChart(control_id) {
       responsive: true,
       plugins: {
         legend: { display: false },
-        annotation: ann.length ? { annotations: ann } : undefined
+        annotation: Object.keys(annotations).length ? { annotations } : undefined
       },
       scales: { x: { title:{ display:true, text:'Run #'} }, y: { title:{ display:true, text: c.unit || 'RFU'} } }
     }
   });
+
 
   el('qc-meta').textContent = `Mean: ${Number.isFinite(mean)?mean:''}  SD: ${Number.isFinite(sd)?sd:''}  Points: ${(c.history||[]).length}`;
 }
