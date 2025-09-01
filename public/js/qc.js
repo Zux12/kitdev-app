@@ -1,7 +1,3 @@
-// Enable annotation plugin (mean / ±SD lines)
-if (window.ChartAnnotation) { Chart.register(window.ChartAnnotation); }
-
-
 let CONTROLS = [];
 let CHART = null;
 
@@ -39,7 +35,9 @@ async function loadRecent() {
     tb.appendChild(tr);
   });
   if (!j.data || j.data.length === 0) {
-    const tr = document.createElement('tr'); tr.innerHTML = `<td colspan="5">No results yet.</td>`; tb.appendChild(tr);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td colspan="5">No results yet.</td>`;
+    tb.appendChild(tr);
   }
 }
 
@@ -49,36 +47,37 @@ function renderChart(control_id) {
   const c = getControl(control_id);
   if (!c) return;
 
-  const labels = (c.history || []).map((h,i)=> i+1);
-  const data = (c.history || []).map(h => h.value);
+  const values = (c.history || []).map(h => h.value);
+  const labels = values.map((_, i) => i + 1);
+
   const mean = Number(c.mean);
-  const sd = Number(c.sd);
+  const sd   = Number(c.sd);
 
   if (CHART) { CHART.destroy(); CHART = null; }
   const ctx = document.getElementById('qc-chart').getContext('2d');
+
   const datasets = [
-    { label: 'Value', data, fill: false, tension: 0.2 },
-  ];
-  const datasets = [
-    { label: 'Value', data, fill: false, tension: 0.2 },
+    { label: 'Value', data: values, fill: false, tension: 0.2 }
   ];
 
-  // Build annotations as an object (required by the plugin)
-  const annotations = {};
+  // Add guide lines as datasets (no external plugin needed)
+  const mkLine = (y, label) => ({
+    label,
+    data: labels.map(() => y),
+    fill: false,
+    tension: 0,
+    pointRadius: 0,
+    borderWidth: 1,
+    borderDash: [4,4]
+  });
+
   if (Number.isFinite(mean)) {
-    const line = (y, label) => ({
-      type: 'line',
-      yMin: y, yMax: y,
-      borderWidth: 1,
-      borderColor: '#888',
-      label: { display: true, content: label, position: 'start' }
-    });
-    annotations.mean = line(mean, 'Mean');
+    datasets.push(mkLine(mean, 'Mean'));
     if (Number.isFinite(sd) && sd > 0) {
-      annotations.p2sd = line(mean + 2*sd, '+2SD');
-      annotations.m2sd = line(mean - 2*sd, '-2SD');
-      annotations.p3sd = line(mean + 3*sd, '+3SD');
-      annotations.m3sd = line(mean - 3*sd, '-3SD');
+      datasets.push(mkLine(mean + 2*sd, '+2SD'));
+      datasets.push(mkLine(mean - 2*sd, '-2SD'));
+      datasets.push(mkLine(mean + 3*sd, '+3SD'));
+      datasets.push(mkLine(mean - 3*sd, '-3SD'));
     }
   }
 
@@ -87,14 +86,13 @@ function renderChart(control_id) {
     data: { labels, datasets },
     options: {
       responsive: true,
-      plugins: {
-        legend: { display: false },
-        annotation: Object.keys(annotations).length ? { annotations } : undefined
-      },
-      scales: { x: { title:{ display:true, text:'Run #'} }, y: { title:{ display:true, text: c.unit || 'RFU'} } }
+      plugins: { legend: { display: true } },
+      scales: {
+        x: { title: { display: true, text: 'Run #' } },
+        y: { title: { display: true, text: c.unit || 'RFU' } }
+      }
     }
   });
-
 
   el('qc-meta').textContent = `Mean: ${Number.isFinite(mean)?mean:''}  SD: ${Number.isFinite(sd)?sd:''}  Points: ${(c.history||[]).length}`;
 }
@@ -108,7 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = Object.fromEntries(new FormData(e.target).entries());
     if (data.mean) data.mean = Number(data.mean);
     if (data.sd) data.sd = Number(data.sd);
-    const r = await fetch('/api/qc/controls', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+    const r = await fetch('/api/qc/controls', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)
+    });
     const j = await r.json();
     if (j.ok) { e.target.reset(); await loadControls(); alert('Control created'); }
     else alert(j.error || 'Create error');
@@ -118,7 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(e.target).entries());
     data.value = Number(data.value);
-    const r = await fetch('/api/qc/record', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+    const r = await fetch('/api/qc/record', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)
+    });
     const j = await r.json();
     if (j.ok) {
       el('qc-feedback').textContent = `Saved. ${j.result.pass === null ? '' : (j.result.pass ? 'PASS (±2SD)' : 'FAIL (±2SD)')}`;
@@ -136,7 +138,9 @@ document.addEventListener('DOMContentLoaded', () => {
   el('kit-status').addEventListener('submit', async (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(e.target).entries());
-    const r = await fetch('/api/qc/kitlot/status', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+    const r = await fetch('/api/qc/kitlot/status', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)
+    });
     const j = await r.json();
     el('kit-feedback').textContent = j.ok ? 'Kit lot updated' : (j.error || 'Update failed');
     if (j.ok) e.target.reset();
