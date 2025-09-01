@@ -5,13 +5,63 @@
   <title><%= title %> — KitDev</title>
   <link rel="icon" href="/favicon.ico"/>
   <link rel="stylesheet" href="/css/base.css"/>
+  <style>
+    form div{margin:6px 0}
+    table{width:100%;border-collapse:collapse}
+    th,td{border:1px solid #eee;padding:6px 8px;text-align:left}
+    th{background:#fafafa}
+    small.note{color:#666}
+  </style>
 </head>
 <body>
   <%- include('partials/navbar', { page: page }) %>
   <main class="container">
     <h1><%= title %></h1>
-    <p>Placeholder page. Content coming soon.</p>
+
+    <p class="note">
+      <small class="note">De-identified: no names or NRIC. Required: subject_id, sample_id, consent.</small>
+    </p>
+
+    <section>
+      <h3>New eCRF Entry</h3>
+      <form id="ecrf-form">
+        <div><label>Subject ID *</label><br/><input name="subject_id" required placeholder="e.g. S001"/></div>
+        <div><label>Sample ID *</label><br/><input name="sample_id" required placeholder="e.g. SAL-0001"/></div>
+        <div><label>Age</label><br/><input name="age" type="number" min="0" step="1"/></div>
+        <div><label>Sex</label><br/>
+          <select name="sex"><option></option><option>Male</option><option>Female</option><option>Other</option></select>
+        </div>
+        <div><label>Site</label><br/><input name="site" placeholder="e.g. Clinic A"/></div>
+        <div><label>Operator email</label><br/><input name="operator_email" placeholder="user@asian-loop.com"/></div>
+        <div><label>Symptoms</label><br/><textarea name="symptoms" rows="2" placeholder="Optional"></textarea></div>
+        <div><label>Kit result</label><br/>
+          <select name="kit_result">
+            <option></option><option>Positive</option><option>Negative</option><option>Invalid</option>
+          </select>
+        </div>
+        <div><label>Comparator result</label><br/><input name="comparator_result" placeholder="e.g. qPCR Ct=28"/></div>
+        <div><label>Notes</label><br/><input name="notes" placeholder="Optional"/></div>
+        <div><label><input type="checkbox" name="consent" value="1" required/> I confirm informed consent was obtained.</label></div>
+        <button type="submit">Save eCRF</button>
+      </form>
+      <div id="ecrf-feedback" style="margin-top:8px;"></div>
+    </section>
+
+    <section style="margin-top:20px;">
+      <h3>Recent eCRF (last 100)</h3>
+      <button id="btn-export" style="margin-bottom:8px;">Export CSV</button>
+      <table>
+        <thead>
+          <tr>
+            <th>Subject</th><th>Sample</th><th>Age</th><th>Sex</th><th>Site</th>
+            <th>Operator</th><th>Kit Result</th><th>Comparator</th><th>When</th>
+          </tr>
+        </thead>
+        <tbody id="ecrf-body"><tr><td colspan="9">Loading…</td></tr></tbody>
+      </table>
+    </section>
   </main>
-  <script src="/js/common.js"></script>
+
+  <script src="/js/ecrf.js"></script>
 </body>
 </html>
