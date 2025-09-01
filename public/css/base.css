@@ -1,8 +1,132 @@
-body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-.al-header { border-bottom:1px solid #eee; background:#fff; position:sticky; top:0; z-index:10; }
-.al-inner { max-width:1100px; margin:0 auto; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; }
-.al-nav a { margin:0 6px; text-decoration:none; color:#333; padding:6px 10px; border-radius:8px; }
-.al-nav a.active { background:#f0f0f0; }
-.container { max-width:1100px; margin:24px auto; padding:0 16px; }
-img { max-height:36px; }
-@media (max-width:600px){ .al-nav a { padding:6px 8px; font-size:14px; } img{max-height:30px;} }
+/* ====== Global Theme ====== */
+:root{
+  --bg: #f7f8fb;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e5e7eb;
+  --primary: #4f46e5;        /* accent */
+  --primary-700:#4338ca;
+  --ring: rgba(79,70,229,.25);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* ====== Header / Nav ====== */
+.al-header{
+  position:sticky; top:0; z-index:20;
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 6px 18px rgba(15,23,42,.04);
+}
+.al-inner{
+  max-width:1100px; margin:0 auto; padding:12px 16px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.al-brand img{ height:36px; display:block }
+.al-nav{ display:flex; align-items:center; gap:6px; overflow-x:auto; padding-bottom:2px }
+.al-nav a{
+  text-decoration:none;
+  color:var(--muted);
+  padding:8px 12px;
+  border-radius:10px;
+  transition:.15s ease;
+  white-space:nowrap;
+}
+.al-nav a:hover{ background:#f2f3f8; color:var(--text) }
+.al-nav a.active{
+  background: #eef2ff;
+  color: var(--primary);
+  border:1px solid #e0e7ff;
+}
+
+/* ====== Layout ====== */
+.container{ max-width:1100px; margin:22px auto; padding:0 16px }
+h1{ font-size:28px; line-height:1.2; margin:6px 0 12px; font-weight:700 }
+h3{ font-size:18px; margin:0 0 10px; font-weight:700; color:#0b1220 }
+
+/* Every <section> becomes a card */
+section{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  margin:14px 0;
+  box-shadow:0 2px 10px rgba(15,23,42,.03);
+}
+
+/* ====== Forms ====== */
+form div{ margin:10px 0 }
+label{ font-size:13px; color:var(--muted) }
+input, select, textarea{
+  width:100%;
+  padding:10px 12px;
+  font-size:14px;
+  color:var(--text);
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:10px;
+  outline:0;
+  transition:border .15s ease, box-shadow .15s ease;
+}
+input:focus, select:focus, textarea:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 4px var(--ring);
+}
+
+/* Buttons */
+button{
+  appearance:none;
+  border:0;
+  background:var(--primary);
+  color:#fff;
+  padding:10px 14px;
+  font-size:14px;
+  font-weight:600;
+  border-radius:10px;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(79,70,229,.18);
+  transition:transform .06s ease, box-shadow .15s ease, background .15s ease;
+}
+button:hover{ background:var(--primary-700) }
+button:active{ transform:translateY(1px) }
+button:disabled{ opacity:.6; cursor:not-allowed; box-shadow:none }
+
+/* Inline links */
+a{ color:var(--primary) }
+a:hover{ text-decoration:underline }
+
+/* ====== Tables ====== */
+table{ width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden }
+th, td{ padding:10px 12px; border-bottom:1px solid var(--border); text-align:left; font-size:14px }
+th{
+  background:#fafaff;
+  color:var(--muted);
+  font-weight:700; letter-spacing:.02em; text-transform:none;
+}
+tbody tr:last-child td{ border-bottom:none }
+tbody tr:nth-child(odd){ background:#fcfcff }
+tbody tr:hover{ background:#f4f6ff }
+
+/* Tables on small screens */
+@media (max-width:640px){
+  table{ display:block; overflow-x:auto; white-space:nowrap }
+  .al-brand img{ height:30px }
+  .al-nav a{ padding:8px 10px; font-size:14px }
+}
+
+/* ====== Misc ====== */
+.muted{ color:var(--muted) }
+.badge{
+  display:inline-block; padding:3px 8px; font-size:12px; border-radius:999px;
+  background:#eef2ff; color:var(--primary); border:1px solid #e0e7ff;
+}
