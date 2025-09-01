@@ -10,8 +10,74 @@
   <%- include('partials/navbar', { page: page }) %>
   <main class="container">
     <h1><%= title %></h1>
-    <p>Placeholder page. Content coming soon.</p>
+
+    <section>
+      <h3>Analyze CSV</h3>
+      <form id="calib-form">
+        <div>
+          <label>Target (optional)</label><br/>
+          <input name="target" placeholder="e.g. miR-21"/>
+        </div>
+        <div style="margin-top:8px;">
+          <input type="file" name="file" accept=".csv" required />
+        </div>
+        <div style="margin-top:12px;">
+          <button type="submit">Analyze</button>
+        </div>
+      </form>
+
+      <details style="margin-top:8px;">
+        <summary>CSV format (click to view)</summary>
+        <pre style="white-space:pre-wrap">
+# Example 1 (with blanks):
+concentration,rep1,rep2,rep3
+blank,102,99,101
+0,100,98,103
+0.5,120,118,121
+1.0,150,152,149
+2.0,200,198,202
+
+# Example 2 (two columns):
+x,y
+0.5,120
+1.0,150
+2.0,200
+        </pre>
+      </details>
+    </section>
+
+    <section id="results" style="margin-top:24px; display:none;">
+      <h3>Results</h3>
+      <table border="1" cellspacing="0" cellpadding="6">
+        <tbody>
+          <tr><th>Slope</th><td id="res-slope"></td></tr>
+          <tr><th>Intercept</th><td id="res-intercept"></td></tr>
+          <tr><th>R²</th><td id="res-r2"></td></tr>
+          <tr><th>σ(blank)</th><td id="res-sigma"></td></tr>
+          <tr><th>LOD</th><td id="res-lod"></td></tr>
+          <tr><th>LOQ</th><td id="res-loq"></td></tr>
+          <tr><th>Levels</th><td id="res-levels"></td></tr>
+          <tr><th>Conc range</th><td id="res-range"></td></tr>
+          <tr><th>Warnings</th><td id="res-warn"></td></tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:12px;">
+        <label>Notes (optional)</label><br/>
+        <textarea id="save-notes" rows="2" style="width:100%;"></textarea>
+      </div>
+      <button id="btn-save" style="margin-top:8px;">Save Calibration</button>
+    </section>
+
+    <section style="margin-top:24px;">
+      <h3>Latest Saved Models</h3>
+      <table border="1" cellspacing="0" cellpadding="6">
+        <thead><tr><th>Target</th><th>Slope</th><th>Intercept</th><th>R²</th><th>LOD</th><th>LOQ</th><th>When</th></tr></thead>
+        <tbody id="latest-body"><tr><td colspan="7">Loading…</td></tr></tbody>
+      </table>
+    </section>
   </main>
-  <script src="/js/common.js"></script>
+
+  <script src="/js/calibration.js"></script>
 </body>
 </html>
