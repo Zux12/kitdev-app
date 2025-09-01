@@ -32,6 +32,8 @@ app.use('/api/formulations', require('./routes/api_formulations')); // <-- add t
 app.use('/api/qc', require('./routes/api_qc')); // <-- add this
 app.use('/api/dashboard', require('./routes/api_dashboard')); // <-- add this
 app.use('/api/stability', require('./routes/api_stability')); // <-- add this
+app.use('/api/ecrf', require('./routes/api_ecrf'));
+
 
 // --- Page routes ---
 app.get('/',            (req,res)=> res.render('dashboard',     { title: 'Dashboard',            page: 'dashboard' }));
