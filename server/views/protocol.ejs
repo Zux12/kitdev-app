@@ -10,8 +10,42 @@
   <%- include('partials/navbar', { page: page }) %>
   <main class="container">
     <h1><%= title %></h1>
-    <p>Placeholder page. Content coming soon.</p>
+
+    <section>
+      <h3>Active Protocol</h3>
+      <div id="proto-meta">Loading…</div>
+      <ul id="steps-list"></ul>
+    </section>
+
+    <section style="margin-top:16px;">
+      <h3>Start Session</h3>
+      <div>
+        <label>Operator email</label><br/>
+        <input id="op-email" placeholder="user@asian-loop.com"/>
+        <button id="btn-start">Start</button>
+      </div>
+      <div id="session-info" style="margin-top:8px; display:none;">
+        <strong>Session:</strong> <span id="session-id"></span>
+      </div>
+    </section>
+
+    <section id="controls" style="margin-top:16px; display:none;">
+      <h3>Controls</h3>
+      <div id="controls-area"></div>
+      <button id="btn-finish" style="margin-top:8px;">Finish Session</button>
+    </section>
+
+    <section style="margin-top:24px;">
+      <h3>Recent Sessions</h3>
+      <table border="1" cellspacing="0" cellpadding="6">
+        <thead>
+          <tr><th>Operator</th><th>Protocol</th><th>Version</th><th>Started</th><th>Finished</th><th>Total (s)</th></tr>
+        </thead>
+        <tbody id="recent-body"><tr><td colspan="6">Loading…</td></tr></tbody>
+      </table>
+    </section>
   </main>
-  <script src="/js/common.js"></script>
+
+  <script src="/js/protocol.js"></script>
 </body>
 </html>
