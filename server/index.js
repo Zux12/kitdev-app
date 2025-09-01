@@ -29,6 +29,7 @@ app.use('/api/runs', require('./routes/api_runs'));
 app.use('/api/calibration', require('./routes/api_calibration'));
 app.use('/api/protocol', require('./routes/api_protocol'));
 app.use('/api/formulations', require('./routes/api_formulations')); // <-- add this line
+app.use('/api/qc', require('./routes/api_qc')); // <-- add this
 
 // --- Page routes ---
 app.get('/',            (req,res)=> res.render('dashboard',     { title: 'Dashboard',            page: 'dashboard' }));
