@@ -27,6 +27,7 @@ init().catch(err => { console.error('DB connect error:', err); process.exit(1); 
 // --- API routes ---
 app.use('/api/runs', require('./routes/api_runs'));
 app.use('/api/calibration', require('./routes/api_calibration'));
+app.use('/api/protocol', require('./routes/api_protocol'));
 
 // --- Page routes ---
 app.get('/',            (req,res)=> res.render('dashboard',     { title: 'Dashboard',            page: 'dashboard' }));
