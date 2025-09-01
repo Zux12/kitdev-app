@@ -1,0 +1,16 @@
+<header class="al-header">
+  <div class="al-inner">
+    <a class="al-brand" href="/"><img src="/images/logo.jpg" alt="Asianloop logo" /></a>
+    <nav class="al-nav">
+      <a href="/"             class="<%= page==='dashboard'   ? 'active' : '' %>">Dashboard</a>
+      <a href="/runs"         class="<%= page==='runs'        ? 'active' : '' %>">Runs</a>
+      <a href="/calibration"  class="<%= page==='calibration' ? 'active' : '' %>">Calibration</a>
+      <a href="/protocol"     class="<%= page==='protocol'    ? 'active' : '' %>">Protocol</a>
+      <a href="/formulations" class="<%= page==='formulations'? 'active' : '' %>">Formulations</a>
+      <a href="/qc"           class="<%= page==='qc'          ? 'active' : '' %>">QC</a>
+      <a href="/stability"    class="<%= page==='stability'   ? 'active' : '' %>">Stability</a>
+      <a href="/ecrf"         class="<%= page==='ecrf'        ? 'active' : '' %>">eCRF</a>
+      <a href="/admin"        class="<%= page==='admin'       ? 'active' : '' %>">Admin</a>
+    </nav>
+  </div>
+</header>
