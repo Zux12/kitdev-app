@@ -5,13 +5,61 @@
   <title><%= title %> — KitDev</title>
   <link rel="icon" href="/favicon.ico"/>
   <link rel="stylesheet" href="/css/base.css"/>
+  <style>
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
+    .card{background:#fff;border:1px solid #eee;border-radius:12px;padding:16px}
+    .big{font-size:28px;font-weight:700}
+    .label{color:#666}
+    table{width:100%;border-collapse:collapse}
+    th,td{border:1px solid #eee;padding:6px 8px;text-align:left}
+    th{background:#fafafa}
+  </style>
 </head>
 <body>
   <%- include('partials/navbar', { page: page }) %>
   <main class="container">
     <h1><%= title %></h1>
-    <p>Placeholder page. Content coming soon.</p>
+
+    <section class="cards">
+      <div class="card">
+        <div class="label">Runs today</div>
+        <div class="big" id="tile-runs">–</div>
+        <div><a href="/runs">View runs →</a></div>
+      </div>
+      <div class="card">
+        <div class="label">Latest calibration (miR-21)</div>
+        <div id="tile-cal">Slope: <span id="cal-slope">–</span><br/>LOD: <span id="cal-lod">–</span><br/>R²: <span id="cal-r2">–</span></div>
+        <div><a href="/calibration">Calibration →</a></div>
+      </div>
+      <div class="card">
+        <div class="label">Expiring lots (≤ 30 days)</div>
+        <div class="big" id="tile-exp">–</div>
+        <div><a href="/formulations">Formulations & Kits →</a></div>
+      </div>
+      <div class="card">
+        <div class="label">QC fails (7 days)</div>
+        <div class="big" id="tile-qc">–</div>
+        <div><a href="/qc">QC & Lot Release →</a></div>
+      </div>
+    </section>
+
+    <section style="margin-top:24px;">
+      <h3>Expiring soon (≤ 30 days)</h3>
+      <table>
+        <thead><tr><th>Type</th><th>ID</th><th>Status/Storage</th><th>Expiry</th></tr></thead>
+        <tbody id="exp-body"><tr><td colspan="4">Loading…</td></tr></tbody>
+      </table>
+    </section>
+
+    <section style="margin-top:24px;">
+      <h3>Recent QC fails (7 days)</h3>
+      <table>
+        <thead><tr><th>Control</th><th>When</th><th>Value</th><th>Z</th><th>Unit</th></tr></thead>
+        <tbody id="qc-body"><tr><td colspan="5">Loading…</td></tr></tbody>
+      </table>
+    </section>
   </main>
-  <script src="/js/common.js"></script>
+
+  <script src="/js/dashboard.js"></script>
 </body>
 </html>
