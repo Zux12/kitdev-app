@@ -1,3 +1,7 @@
+// Enable annotation plugin (mean / ±SD lines)
+if (window.ChartAnnotation) { Chart.register(window.ChartAnnotation); }
+
+
 let CONTROLS = [];
 let CHART = null;
 
