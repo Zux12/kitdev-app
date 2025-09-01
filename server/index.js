@@ -25,8 +25,8 @@ async function init() {
 init().catch(err => { console.error('DB connect error:', err); process.exit(1); });
 
 // --- API routes ---
-const runsApi = require('./routes/api_runs');
-app.use('/api/runs', runsApi);
+app.use('/api/runs', require('./routes/api_runs'));
+app.use('/api/calibration', require('./routes/api_calibration'));
 
 // --- Page routes ---
 app.get('/',            (req,res)=> res.render('dashboard',     { title: 'Dashboard',            page: 'dashboard' }));
